@@ -24,3 +24,4 @@ provider:
 
 resources:
   - ${file(resources/ec2.yml)}
+  - ${file(resources/outputs.yml)}
