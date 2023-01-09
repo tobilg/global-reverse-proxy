@@ -37,7 +37,7 @@ The configuration can be changed [here](domain-service-stack/src/domainVerifier.
 If you use an external domain provider, such as Namecheap or GoDaddy, make such that you point the DNS settings at your domain's configuration to those which are assigned to your HostedZone by Amazon. You can look these up in the AWS Console or via the AWS CLI.
 
 ### CNAME configuration for proxying
-You also need to add CNAME records to the domains you want to proxy for, e.g. if your proxy service domain is `external.mygreatproxyservice.com`, you need to add a CNAME records to your existing domain (e.g. `test.myexistingdomain.com`) to redirect to the proxy service domain:
+You also need to add CNAME records to the domains you want to proxy for, e.g. if your proxy service domain is `external.mygreatproxyservice.com`, you need to add a CNAME record to your existing domain (e.g. `test.myexistingdomain.com`) to redirect to the proxy service domain:
 
 ```bash
 CNAME test.myexistingdomain.com external.mygreatproxyservice.com
