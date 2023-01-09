@@ -24,8 +24,22 @@ Please configure the following values for the different stacks:
 * The email address to use for automatic certificate generation via LetsEncrypt ([letsEncryptEmailAddress](proxy-server-stack/serverless.yml#L8))
 * The domain name of the proxy service itself, which is then used by GlobalAccelerator ([domain](accelerator-stack/serverless.yml#L6))
 
+### Whitelisted domain configuration
+You need to make sure that not everyone can use your reverse proxy with every domain. Therefore, you need to configure the whitelist of domains that you be used by Caddy's on-demand TLS feature.
+
+This is done with the Domain Verifier Lambda function, which is deployed at a Function URL endpoint.
+
+The configuration can be changed [here](domain-service-stack/src/domainVerifier.js#L3-L6) before deploying the service.
+
 ### DNS / Nameserver configurations
 If you use an external domain provider, such as Namecheap or GoDaddy, make such that you point the DNS settings at your domain's configuration to those which are assigned to your HostedZone by Amazon. You can look these up in the AWS Console or via the AWS CLI.
+
+### CNAME configuration for proxying
+You also need to add CNAME records to the domains you want to proxy for, e.g. if your proxy service domain is `external.mygreatproxyservice.com`, you need to add a CNAME records to your existing domain (e.g. `test.myexistingdomain.com`) to redirect to the proxy service domain:
+
+```bash
+CNAME test.myexistingdomain.com external.mygreatproxyservice.com
+```
 
 ### Passing options during deployment
 When running `sls deploy` for each stack, you can specify the following options to customize the deployments:
