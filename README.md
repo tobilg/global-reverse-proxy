@@ -1,6 +1,9 @@
 # global-reverse-proxy
 Building a global reverse proxy with on-demand SSL support on AWS.
 
+## Architecture overview
+![Architecture](images/architecture.png)
+
 ## Prerequisites
 
 ### Serverless Framework
