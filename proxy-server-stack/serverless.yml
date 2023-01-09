@@ -15,7 +15,7 @@ custom:
   ec2:
     instanceType: 't2.micro' # For free tier usage
     keyName: 'the-key-name' # Update this to your key name, which you need to create in the AWS Console BEFORE deploying this stack
-    sshClientIPAddress: 'XXX.XXX.XXX.XXX' # Change to your current IP address, or disable the port 22 portion in the SecurityGroup
+    sshClientIPAddress: 'XXX.XXX.XXX.XXX' # Change to your current IP address, and enable the port 22 portion in the SecurityGroup
 
 provider:
   name: aws
