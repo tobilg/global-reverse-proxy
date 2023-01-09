@@ -1,0 +1,21 @@
+service: global-reverse-proxy-accelerator
+
+custom:
+
+  # Target domain name
+  domain: 'your-target-domain.com'
+
+  ec2:
+    # Add instance information manually, and add a new endpoint group for each instance in global-accelerator.yml
+    instance1:
+      id: '${cf:global-reverse-proxy-server-1-${self:provider.stage}.EC2InstanceId}'
+      region: '${cf:global-reverse-proxy-server-1-${self:provider.stage}.EC2Region}'
+
+provider:
+  name: aws
+  region: 'us-east-1' # Needs to be in us-east-1 because GlobalAccelerator!
+  stage: ${opt:stage, 'prd'} # Can be changed by the --stage CLI option
+
+resources:
+  - ${file(resources/dns-records.yml)}
+  - ${file(resources/global-accelerator.yml)}

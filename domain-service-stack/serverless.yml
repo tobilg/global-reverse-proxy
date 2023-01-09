@@ -1,0 +1,27 @@
+service: global-reverse-proxy-domain-service
+
+custom:
+
+  # DynamoDB
+  dynamodb:
+    tableName: 'global-proxy-certificate-table'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ${opt:region, 'us-east-1'} # Can be changed by the --region CLI option
+  stage: ${opt:stage, 'prd'} # Can be changed by the --stage CLI option
+  logRetentionInDays: 14
+
+functions:
+  domainVerifier:
+    handler: src/domainVerifier.handler
+    memorySize: 128
+    timeout: 5
+    # Use Function URLs
+    url:
+      cors: true
+
+resources:
+  - ${file(resources/dynamo-db.yml)}
+  - ${file(resources/outputs.yml)}

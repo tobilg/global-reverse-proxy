@@ -1,0 +1,91 @@
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html#aws-resource-cloudformation-init-syntax
+    Properties:
+      InstanceType: '${self:custom.ec2.instanceType}'
+      KeyName: '${self:custom.ec2.keyName}'
+      SecurityGroups: 
+        - !Ref 'InstanceSecurityGroup'
+      ImageId: 'ami-0b5eea76982371e91' # Amazon Linux 2 AMI
+      IamInstanceProfile: !Ref 'InstanceProfile'
+      UserData: !Base64 
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              sudo wget -O /usr/bin/caddy "https://github.com/tobilg/aws-caddy-build/raw/main/releases/aws_caddy_v2.6.2_linux"
+            - |
+              sudo chmod +x /usr/bin/caddy
+            - |
+              sudo groupadd --system caddy
+            - |
+              sudo useradd --system --gid caddy --create-home --home-dir /var/lib/caddy --shell /usr/sbin/nologin --comment "Caddy web server" caddy
+            - |
+              sudo mkdir -p /etc/caddy
+            - |
+              sudo echo -e "${file(./configs.js):caddyService}" | sudo tee /etc/systemd/system/caddy.service
+            - |
+              sudo echo -e "${file(./configs.js):caddyFile}" | sudo tee /etc/caddy/Caddyfile
+            - |
+              sudo echo -e "AWS_REGION=${self:provider.region}\nTABLE_NAME=${self:custom.caddy.dynamoDBTableName}\nDOMAIN_SERVICE_ENDPOINT=${self:custom.caddy.domainServiceEndpoint}\nLETSENCRYPT_EMAIL_ADDRESS=${self:custom.caddy.letsEncryptEmailAddress}\nTARGET_DOMAIN=${self:custom.caddy.targetDomainName}" | sudo tee /etc/caddy/environment
+            - |
+              sudo systemctl daemon-reload
+            - |
+              sudo systemctl enable caddy
+            - |
+              sudo systemctl start --now caddy
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP(S) and SSH access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: '/'
+      Roles: 
+        - !Ref 'InstanceRole'
+
+  InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Path: '/'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+  InstancePolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: 'use-dynamodb-ssm-policy'
+      PolicyDocument:
+        Statement:
+          - Effect: 'Allow'
+            Action:
+              - dynamodb:Scan
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Resource: !Sub '${CertificatesTable.Arn}'
+      Roles:
+        - !Ref 'InstanceRole'

@@ -1,0 +1,7 @@
+Outputs:
+  EC2InstanceId:
+    Description: The EC2 instance is
+    Value: !Ref 'EC2Instance'
+  EC2Region:
+    Description: The region the EC2 instance is deployed to
+    Value: '${self:provider.region}'

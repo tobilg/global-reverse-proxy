@@ -1,0 +1,31 @@
+Resources:
+  Accelerator:
+    Type: AWS::GlobalAccelerator::Accelerator
+    Properties:
+      Name: 'External-Accelerator'
+      Enabled: true
+  
+  Listener:
+    Type: AWS::GlobalAccelerator::Listener
+    Properties:
+      AcceleratorArn:
+        Ref: Accelerator
+      Protocol: TCP
+      ClientAffinity: NONE
+      PortRanges:
+        - FromPort: 443
+          ToPort: 443
+
+  EndpointGroup1:
+    Type: AWS::GlobalAccelerator::EndpointGroup
+    Properties: 
+      EndpointConfigurations: 
+        - EndpointId: '${self:custom.ec2.instance1.id}'
+          Weight: 1
+      EndpointGroupRegion: '${self:custom.ec2.instance1.region}'
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: '/health'
+      HealthCheckPort: 80
+      HealthCheckProtocol: 'HTTP'
+      ListenerArn: !Ref 'Listener'
+      ThresholdCount: 3

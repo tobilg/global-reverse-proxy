@@ -1,0 +1,21 @@
+Resources:
+  HostedZone:
+    Type: 'AWS::Route53::HostedZone'
+    Properties:
+      HostedZoneConfig:
+        Comment: 'Hosted zone for ${self:custom.domain}'
+      Name: '${self:custom.domain}'
+      
+  ExternalDnsRecord:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      Comment: 'External subdomain for ${self:custom.domain}'
+      HostedZoneId: !Ref 'HostedZone'
+      Type: A
+      Name: 'external.${self:custom.domain}'
+      AliasTarget:
+        # Will redirect to the GlobalAccelerator DNS name
+        DNSName: !Sub '${Accelerator.DnsName}'
+        # Default (static) hosted zone for GlobalAccelerator
+        # See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget-1.html#cfn-route53-aliastarget-hostedzoneid
+        HostedZoneId: 'Z2BJ6XQ5FK7U4H'

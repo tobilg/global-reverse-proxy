@@ -1,0 +1,23 @@
+service: global-reverse-proxy-server-1 # Assuming there's only one EC2 instance per region, otherwise change stack name manually
+
+custom:
+
+  # Caddy config
+  caddy:
+    targetDomainName: 'your-target-domain.com' # The target domain name where to proxy to
+    letsEncryptEmailAddress: 'your-letsencrypt-email@your-domain.com' # Use for automatic certificate generation
+    domainServiceEndpoint: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.DomainVerifierFunctionUrl}' # Get Function URL from domain service stack export
+    dynamoDBTableName: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableName}' # Get DynamoDB table name from base stack export
+
+  # EC2
+  ec2:
+    instanceType: 't2.micro' # For free tier usage
+    keyName: 'my-key-name' # Update this to your key name, which you need to create in the AWS Console BEFORE deploying this stack
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'} # Can be changed by the --region CLI option
+  stage: ${opt:stage, 'prd'} # Can be changed by the --stage CLI option
+
+resources:
+  - ${file(resources/ec2.yml)}
