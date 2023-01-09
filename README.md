@@ -23,7 +23,7 @@ Please configure the following values for the different stacks:
 * The target domain name where you want your reverse proxy to send the requests to ([targetDomainName](proxy-server-stack/serverless.yml#L7))
 * The email address to use for automatic certificate generation via LetsEncrypt ([letsEncryptEmailAddress](proxy-server-stack/serverless.yml#L8))
 * The domain name of the proxy service itself, which is then used by GlobalAccelerator ([domain](accelerator-stack/serverless.yml#L6))
-* (optionally) The current IP address which you want to use the EC2 instance(s) via SSH from ([sshClientIPAddress](proxy-server-stack/serverless.yml#L18))
+* Optionally: The current IP address which you want to use the EC2 instance(s) via SSH from ([sshClientIPAddress](proxy-server-stack/serverless.yml#L18)). If you want to use SSH, you'll need to uncomment the respective [SecurityGroup settings](proxy-server-stack/resources/ec2.yml#L54-L57)
 
 ### Whitelisted domain configuration
 You need to make sure that not everyone can use your reverse proxy with every domain. Therefore, you need to configure the whitelist of domains that you be used by Caddy's [on-demand TLS feature](https://caddyserver.com/docs/automatic-https#on-demand-tls).

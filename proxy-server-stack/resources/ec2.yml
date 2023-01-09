@@ -50,11 +50,13 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
-        # Comment out (you'll not be able to access the EC2 instance)
-        - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
-          CidrIp: '${self:custom.ec2.sshClientIPAddress}/32'
+        # Uncomment if you want to enable SSH access with your current IP address
+        # HINT: This is not an ideal setup, but it's fast and it works. Please have a look at
+        # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html for the possible other options
+        # - IpProtocol: tcp
+        #   FromPort: '22'
+        #   ToPort: '22'
+        #   CidrIp: '${self:custom.ec2.sshClientIPAddress}/32'
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
