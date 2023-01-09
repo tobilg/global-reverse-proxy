@@ -43,3 +43,7 @@ You need to follow a specific deployment order to be able to run the overall ser
 2. Proxy server(s): `cd proxy-server-stack && sls deploy && cd ..`
 3. GlobalAccelerator: `cd accelerator-stack && sls deploy && cd ..`
 
+## Costs
+The deployment and usage of the infrastructure is not for free, although some costs should be covered by the AWS Free Tier (but this depends on what you already run in your AWS account). The GlobalAccelerator will definitely incur costs, as well as the network traffic going out. The EC2 instance(s) will also generate costs for your account.
+
+Please make yourself comfortable with the AWS pricing. Use these stacks at your own risk, and review the generated IaC as careful as possible.
