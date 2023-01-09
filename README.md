@@ -31,6 +31,8 @@ This is done with the Domain Verifier Lambda function, which is deployed at a Fu
 
 The configuration can be changed [here](domain-service-stack/src/domainVerifier.js#L3-L6) before deploying the service.
 
+**HINT**: To use this dynamically, as you'd probably wish in a production setting, you could rewrite the Lambda function to read the custom domains from a DynamoDB table, and have another Lambda function run recurrently to issue DNS checks for the CNAME entries the customers would need to make (see below).
+
 ### DNS / Nameserver configurations
 If you use an external domain provider, such as Namecheap or GoDaddy, make such that you point the DNS settings at your domain's configuration to those which are assigned to your HostedZone by Amazon. You can look these up in the AWS Console or via the AWS CLI.
 
