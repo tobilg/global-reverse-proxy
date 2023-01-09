@@ -8,6 +8,9 @@ You need to have a recent (>=3.1.2) version of the [Serverless Framework](https:
 
 If you haven't, you can run `npm i -g serverless`.
 
+### Valid AWS credentials
+The Serverless Framework relies on already configured AWS credentials. Please refer to the [docs](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) to learn how to set them up on your local machine.
+
 ### EC2 key already configured
 If you want to interact with the deployed EC2 instance(s), you need to add your existing public SSH key, or create a new one. Please have a look at the [AWS docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html#how-to-generate-your-own-key-and-import-it-to-aws) to learn how you can do that.
 
