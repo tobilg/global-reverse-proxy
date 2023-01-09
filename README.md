@@ -27,7 +27,7 @@ If you use an external domain provider, such as Namecheap or GoDaddy, make such 
 ### Passing options during deployment
 When running `sls deploy` for each stack, you can specify the following options to customize the deployments:
 * `--stage`: This will configure the so-called stage, which is part of the stack name (default: `prd`)
-* `--stage`: This will configure the AWS region where the stack is deployed to (default: `us-east-1`)
+* `--region`: This will configure the AWS region where the stack is deployed to (default: `us-east-1`)
 
 ## Deployment
 The infrastructure consists of three different stacks:
