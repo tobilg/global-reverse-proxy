@@ -25,7 +25,7 @@ Please configure the following values for the different stacks:
 * The domain name of the proxy service itself, which is then used by GlobalAccelerator ([domain](accelerator-stack/serverless.yml#L6))
 
 ### Whitelisted domain configuration
-You need to make sure that not everyone can use your reverse proxy with every domain. Therefore, you need to configure the whitelist of domains that you be used by Caddy's on-demand TLS feature.
+You need to make sure that not everyone can use your reverse proxy with every domain. Therefore, you need to configure the whitelist of domains that you be used by Caddy's [on-demand TLS feature](https://caddyserver.com/docs/automatic-https#on-demand-tls).
 
 This is done with the Domain Verifier Lambda function, which is deployed at a Function URL endpoint.
 
