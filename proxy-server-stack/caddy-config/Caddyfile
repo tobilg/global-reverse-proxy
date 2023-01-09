@@ -6,7 +6,7 @@
         }
 
 	storage dynamodb {$TABLE_NAME} {
-                aws_region {$AWS_REGION}
+                aws_region {$TABLE_REGION}
         }
 }
 

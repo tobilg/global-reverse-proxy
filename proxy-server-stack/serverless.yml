@@ -8,6 +8,7 @@ custom:
     letsEncryptEmailAddress: 'your-letsencrypt-email@your-domain.com' # Use for automatic certificate generation
     domainServiceEndpoint: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.DomainVerifierFunctionUrl}' # Get Function URL from domain service stack export
     dynamoDBTableName: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableName}' # Get DynamoDB table name from base stack export
+    dynamoDBTableRegion: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableRegion}' # Get DynamoDB table name from base stack export
 
   # EC2
   ec2:

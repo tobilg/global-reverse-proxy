@@ -5,3 +5,6 @@ Outputs:
   CertificateTableName:
     Description: Name of the certificate DynamoDB table
     Value: '${self:custom.dynamodb.tableName}'
+  CertificateTableRegion:
+    Description: Region the certificate DynamoDB table is deployed in
+    Value: '${self:provider.region}'
