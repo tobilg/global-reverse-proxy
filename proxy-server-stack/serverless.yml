@@ -7,13 +7,15 @@ custom:
     targetDomainName: 'your-target-domain.com' # The target domain name where to proxy to
     letsEncryptEmailAddress: 'your-letsencrypt-email@your-domain.com' # Use for automatic certificate generation
     domainServiceEndpoint: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.DomainVerifierFunctionUrl}' # Get Function URL from domain service stack export
+    dynamoDBTableArn: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableArn}' # Get DynamoDB table name from base stack export
     dynamoDBTableName: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableName}' # Get DynamoDB table name from base stack export
     dynamoDBTableRegion: '${cf:global-reverse-proxy-domain-service-${self:provider.stage}.CertificateTableRegion}' # Get DynamoDB table name from base stack export
 
   # EC2
   ec2:
     instanceType: 't2.micro' # For free tier usage
-    keyName: 'my-key-name' # Update this to your key name, which you need to create in the AWS Console BEFORE deploying this stack
+    keyName: 'the-key-name' # Update this to your key name, which you need to create in the AWS Console BEFORE deploying this stack
+    sshClientIPAddress: 'XXX.XXX.XXX.XXX' # Change to your current IP address, or disable the port 22 portion in the SecurityGroup
 
 provider:
   name: aws

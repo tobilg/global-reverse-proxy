@@ -2,6 +2,9 @@ Outputs:
   DomainVerifierFunctionUrl:
     Description: The URL for the domain Lambda function
     Value: !GetAtt 'DomainVerifierLambdaFunctionUrl.FunctionUrl'
+  CertificateTableArn:
+    Description: ARN of the certificate DynamoDB table
+    Value: !GetAtt 'CertificatesTable.Arn'
   CertificateTableName:
     Description: Name of the certificate DynamoDB table
     Value: '${self:custom.dynamodb.tableName}'

@@ -25,9 +25,9 @@ Resources:
             - |
               sudo mkdir -p /etc/caddy
             - |
-              sudo echo -e "${file(./configs.js):caddyService}" | sudo tee /etc/systemd/system/caddy.service
+              sudo echo -e '${file(./configs.js):caddyService}' | sudo tee /etc/systemd/system/caddy.service
             - |
-              sudo echo -e "${file(./configs.js):caddyFile}" | sudo tee /etc/caddy/Caddyfile
+              sudo printf '${file(./configs.js):caddyFile}' | sudo tee /etc/caddy/Caddyfile
             - |
               sudo echo -e "TABLE_REGION=${self:custom.caddy.dynamoDBTableRegion}\nTABLE_NAME=${self:custom.caddy.dynamoDBTableName}\nDOMAIN_SERVICE_ENDPOINT=${self:custom.caddy.domainServiceEndpoint}\nLETSENCRYPT_EMAIL_ADDRESS=${self:custom.caddy.letsEncryptEmailAddress}\nTARGET_DOMAIN=${self:custom.caddy.targetDomainName}" | sudo tee /etc/caddy/environment
             - |
@@ -50,6 +50,11 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        # Comment out (you'll not be able to access the EC2 instance)
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '${self:custom.ec2.sshClientIPAddress}/32'
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -86,6 +91,6 @@ Resources:
               - dynamodb:PutItem
               - dynamodb:UpdateItem
               - dynamodb:DeleteItem
-            Resource: !Sub '${CertificatesTable.Arn}'
+            Resource: '${self:custom.caddy.dynamoDBTableArn}'
       Roles:
         - !Ref 'InstanceRole'
